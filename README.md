@@ -18,8 +18,8 @@ The Airstream Selector App is a quick, API-driven recommender that helps choose 
 - Fast, single-response API
 
 ### 📁 Structure
-frontend/ # React app
-backend/ # FastAPI + CSV processing
+- frontend/ # React app
+- backend/ # FastAPI + CSV processing
 
 ### 🚀 Running the App
 1. **Backend**:
