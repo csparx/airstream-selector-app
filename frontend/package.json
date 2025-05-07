@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "serve -s build",
+    "build": "react-scripts build",
     "heroku-postbuild": "npm install && npm run build"
   },
   "browserslist": {

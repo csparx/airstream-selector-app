@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e267f43b.css",
+    "main.js": "/static/js/main.b644bcc6.js",
+    "static/media/airstream-bg.jpeg": "/static/media/airstream-bg.c568efde7865483f8a64.jpeg",
+    "index.html": "/index.html",
+    "main.e267f43b.css.map": "/static/css/main.e267f43b.css.map",
+    "main.b644bcc6.js.map": "/static/js/main.b644bcc6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e267f43b.css",
+    "static/js/main.b644bcc6.js"
+  ]
+}
