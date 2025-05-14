@@ -13,23 +13,34 @@ function App() {
   const [result, setResult] = useState(null);
 
   const handleSubmit = async () => {
-    const queryParams = new URLSearchParams();
+    try {
+      const queryParams = new URLSearchParams();
+      if (sleeps) queryParams.append("sleeps", sleeps);
+      if (budget) queryParams.append("budget", budget);
+      if (offgrid) queryParams.append("offgrid", offgrid);
+      if (kitchen) queryParams.append("kitchen", kitchen);
+      if (bathroom) queryParams.append("bathroom", bathroom);
+      queryParams.append("minLength", lengthRange[0]);
+      queryParams.append("maxLength", lengthRange[0]);
+      if (gvwr) queryParams.append("maxGvwr", gvwr);
 
-    if (sleeps) queryParams.append("sleeps", sleeps);
-    if (budget) queryParams.append("budget", budget);
-    if (offgrid) queryParams.append("offgrid", offgrid);
-    if (kitchen) queryParams.append("kitchen", kitchen);
-    if (bathroom) queryParams.append("bathroom", bathroom);
-    queryParams.append("minLength", lengthRange[0]);
-    queryParams.append("maxLength", lengthRange[1]);
-    if (gvwr) queryParams.append("maxGvwr", gvwr);
+      const query = queryParams.toString();
+      const res = await fetch(`https://airstream-selector-app-b3c97bf21c39.herokuapp.com/recommend?${query}`);
+      console.log("Response status:", res.status); // Log the response status
 
-    const query = queryParams.toString();
-    console.log("Query String:", query);
-    const res = await fetch(`http://localhost:8000/recommend?${query}`);
-    const data = await res.json();
-    setResult(data.recommendation || data.message);
+      if (!res.ok) {
+        const errorText = await res.text(); // Grab the raw error response
+        throw new Error(`API returned ${res.status}: ${errorText}`);
+      }
+
+      const data = await res.json();
+      setResult(data.recommendation || data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+      setResult("There was an error contacting the server. Please try again.");
+    }
   };
+
 
   return (
     <div style={{ padding: 20 }}>

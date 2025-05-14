@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import pandas as pd
 
 app = FastAPI()
@@ -7,7 +8,10 @@ app = FastAPI()
 # Allow frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://airstream-selector-frontend-f38d3ae0b526.herokuapp.com"
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -17,9 +21,9 @@ df = pd.read_csv("AirstreamDataset.csv")
 
 def preprocess(df):
     df["Sleeps"] = df["Sleeps"].str.extract(r'(\d+)').astype(float)
-    df["Price"] = df["Price"].replace('[\$,]', '', regex=True).astype(float)
-    df["Length"] = df["Length"].replace('[^\d.]', '', regex=True).astype(float)  # Remove non-numeric characters
-    df["GVWR"] = df["GVWR"].replace('[^\d.]', '', regex=True).astype(float)  # Remove non-numeric characters
+    df["Price"] = df["Price"].replace(r'[\$,]', '', regex=True).astype(float)
+    df["Length"] = df["Length"].replace(r'[^\d.]', '', regex=True).astype(float)  # Remove non-numeric characters
+    df["GVWR"] = df["GVWR"].replace(r'[^\d.]', '', regex=True).astype(float)  # Remove non-numeric characters
     return df
 
 df = preprocess(df)
@@ -71,3 +75,5 @@ def recommend(
 
     result = best.iloc[0].to_dict()
     return {"recommendation": result}
+
+app.mount("/", StaticFiles(directory="build", html=True))

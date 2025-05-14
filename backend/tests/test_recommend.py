@@ -17,9 +17,13 @@ def test_recommend_no_filters():
 def test_recommend_with_filters():
     response = client.get("/recommend", params={
         "sleeps": 4,
-        "budget": 50000,
-        "length": 20,
-        "maxGvwr": 7000
+        "budget": 500000,
+        "offgrid": True,
+        "kitchen": "full",
+        "bathroom": "full",
+        "maxLength": 32,
+        "minLength": 20,
+        "maxGvwr": 10000,
     })
     assert response.status_code == 200
     data = response.json()
@@ -27,6 +31,9 @@ def test_recommend_with_filters():
     if "recommendation" in data:
         recommendation = data["recommendation"]
         assert recommendation["Sleeps"] >= 4
-        assert recommendation["Price"] <= 50000
-        assert recommendation["Length"] >= 20
-        assert recommendation["GVWR"] <= 7000
+        assert recommendation["Price"] <= 500000
+        assert recommendation["Off-grid features"] == "solar"
+        assert "full" in recommendation["Kitchen"].lower()
+        assert "full" in recommendation["Bathroom"].lower()
+        assert recommendation["Length"] >= 32
+        assert recommendation["GVWR"] <= 10000
